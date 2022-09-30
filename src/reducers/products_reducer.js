@@ -50,6 +50,7 @@ const products_reducer = (state, action) => {
     };
   }
   if (action.type === GET_SINGLE_PRODUCT_ERROR) {
+    console.log('in GET_SINGLE_PRODUCT_ERROR REDUCER');
     return {
       ...state,
       single_product_loading: false,

@@ -22,12 +22,18 @@ const SingleProductPage = () => {
     single_product: product,
     fetchSingleProduct,
   } = useProductsContext();
-
+  console.log(error);
   useEffect(() => {
     fetchSingleProduct(`${url}${id}`);
   }, [id]);
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error />;
+  }
 
-  return <h4>single product page</h4>;
+  return <h4>sinnngle product page</h4>;
 };
 
 const Wrapper = styled.main`
