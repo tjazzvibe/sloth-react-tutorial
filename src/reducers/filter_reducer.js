@@ -10,10 +10,10 @@ import {
 } from '../actions';
 
 const filter_reducer = (state, action) => {
+  console.log(action.type);
   if (action.type === LOAD_PRODUCTS) {
     let maxPrice = action.payload.map((p) => p.price);
     maxPrice = Math.max(...maxPrice);
-
     return {
       ...state,
       all_products: [...action.payload],
@@ -30,10 +30,10 @@ const filter_reducer = (state, action) => {
   if (action.type === UPDATE_SORT) {
     return { ...state, sort: action.payload };
   }
+  
   if (action.type === SORT_PRODUCTS) {
     const { sort, filtered_products } = state;
     let tempProducts = [...filtered_products];
-
     if (sort === 'price-lowest') {
       tempProducts.sort((a, b) => a.price - b.price);
     }
@@ -50,8 +50,15 @@ const filter_reducer = (state, action) => {
         b.name.localeCompare(a.name, { ignorePunctuation: true })
       );
     }
+    
     return { ...state, filtered_products: tempProducts };
   }
+  if (action.type === UPDATE_FILTERS) {
+  console.log('what the fuck');
+  const { name, value } = action.payload;
+  return { ...state, filters: { ...state.filters, [name]: value } };
+}
+
   throw new Error(`No Matching "${action.type}" - action type`);
 };
 

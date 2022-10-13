@@ -32,33 +32,51 @@ const initialState = {
 const FilterContext = React.createContext();
 
 export const FilterProvider = ({ children }) => {
-  const { products } = useProductsContext();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const { products } = useProductsContext()
+  const [state, dispatch] = useReducer(reducer, initialState)
   useEffect(() => {
     dispatch({ type: LOAD_PRODUCTS, payload: products });
   }, [products]);
-  useEffect(() => {
-    dispatch({ type: SORT_PRODUCTS });
-  }, [products, state.sort]);
+useEffect(() => {
+    dispatch({ type: LOAD_PRODUCTS, payload: products })
+  }, [products])
+ 
 
-  const setListView = () => {
-    dispatch({ type: SET_GRIDVIEW });
-  };
+const setListView = () => {
+    dispatch({ type: SET_LISTVIEW })
+  }
   const setGridView = () => {
-    dispatch({ type: SET_LISTVIEW });
-  };
+    dispatch({ type: SET_GRIDVIEW })
+  }
 
   const updateSort = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    dispatch({ type: UPDATE_SORT, payload: value });
+    // for demonstration
+    // const name = e.target.name
+    const value = e.target.value
+    dispatch({ type: UPDATE_SORT, payload: value })
+  }
+
+  const updateFilters = (e) => {
+    console.log('in update filters');
+    let name = e.target.name
+    let value = e.target.value
+    console.log(name, value);
+    dispatch({ type: UPDATE_FILTERS, payload: { name, value } });
   };
+  const clearFilters = () => {};
 
   return (
-    <FilterContext.Provider
-      value={{ ...state, setGridView, setListView, updateSort }}
+<FilterContext.Provider
+      value={{
+        ...state,
+        setGridView,
+        setListView,
+        updateSort,
+        updateFilters,
+        clearFilters,
+      }}
     >
-      {children}
+     {children}
     </FilterContext.Provider>
   );
 };
