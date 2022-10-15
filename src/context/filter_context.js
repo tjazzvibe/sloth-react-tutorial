@@ -32,41 +32,55 @@ const initialState = {
 const FilterContext = React.createContext();
 
 export const FilterProvider = ({ children }) => {
-  const { products } = useProductsContext()
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const { products } = useProductsContext();
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   useEffect(() => {
     dispatch({ type: LOAD_PRODUCTS, payload: products });
   }, [products]);
-useEffect(() => {
-    dispatch({ type: LOAD_PRODUCTS, payload: products })
-  }, [products])
- 
 
-const setListView = () => {
-    dispatch({ type: SET_LISTVIEW })
-  }
+  useEffect(() => {
+    dispatch({ type: FILTER_PRODUCTS, payload: products });
+    dispatch({ type: SORT_PRODUCTS, payload: products });
+  }, [products, state.sort, state.filters]);
+
+  const setListView = () => {
+    dispatch({ type: SET_LISTVIEW });
+  };
   const setGridView = () => {
-    dispatch({ type: SET_GRIDVIEW })
-  }
+    dispatch({ type: SET_GRIDVIEW });
+  };
 
   const updateSort = (e) => {
     // for demonstration
     // const name = e.target.name
-    const value = e.target.value
-    dispatch({ type: UPDATE_SORT, payload: value })
-  }
+    const value = e.target.value;
+    dispatch({ type: UPDATE_SORT, payload: value });
+  };
 
   const updateFilters = (e) => {
-    console.log('in update filters');
-    let name = e.target.name
-    let value = e.target.value
-    console.log(name, value);
+    let name = e.target.name;
+    let value = e.target.value;
+    if (name === 'category') {
+      value = e.target.textContent;
+    }
+    if (name === 'color') {
+      value = e.target.dataset.color;
+    }
+    if (name === 'price') {
+      value = Number(value);
+    }
+    if (name === 'shipping') {
+      value = e.target.checked;
+    }
     dispatch({ type: UPDATE_FILTERS, payload: { name, value } });
   };
-  const clearFilters = () => {};
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
 
   return (
-<FilterContext.Provider
+    <FilterContext.Provider
       value={{
         ...state,
         setGridView,
@@ -76,7 +90,7 @@ const setListView = () => {
         clearFilters,
       }}
     >
-     {children}
+      {children}
     </FilterContext.Provider>
   );
 };
